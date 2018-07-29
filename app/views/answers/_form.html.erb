@@ -1,0 +1,14 @@
+<div class="row">
+	<div class="col">
+		<%= form_for [@question, @question.answers.build] do |f| %>
+		<div class="form-group">
+		  <%= f.text_area :body, class: "form-control", placeholder: "Add Answer" %>
+		</div>
+
+		<div class="actions text-right">
+		  <%= f.submit "Answer", class: "btn btn-primary font-weight-bold" %>
+		</div>
+		<% end %>
+
+	</div>
+</div>

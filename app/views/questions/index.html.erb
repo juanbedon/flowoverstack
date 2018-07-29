@@ -1,0 +1,32 @@
+<% provide(:page_title, 'Home') %>
+
+<div class="container">
+  <div class="row my-5">
+
+    <div class="col-sm-6 offset-sm-3">
+      
+      <% @questions.each do |question| %>
+
+        <div class="float-right">
+
+          <i class="fas fa-comments"></i>
+          <%= question.answers.count %>         
+          
+          <br>
+
+          <i class="fas fa-caret-up mr-2"></i>
+          <%= question.votes.count %>
+        </div>
+
+        <h3 class="my-0"><%= link_to question.title, question %></h3>
+        <small>Asked by <%= question.user.email %>, <%= time_ago_in_words(question.created_at) %> ago.</small>
+        <p class="my-0"><%= markdown(truncate(question.description, :length => 250)) %></p>
+
+        <hr>
+
+      <% end %>
+
+    </div>
+
+  </div>
+</div>

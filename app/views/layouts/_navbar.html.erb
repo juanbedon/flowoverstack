@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">  
+  <div class="container">
+    <a class="navbar-brand" href="/">Flow<span class="light">Overstack</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto mx-2">        
+        <form class="form-inline my-2 my-lg-0">
+          <%= form_tag questions_path, method: :get do %>
+            <div class="form-group">
+              <%= text_field_tag :title, params[:title], class: "form-control", placeholder: "Search" %>
+            </div>
+          <% end %>
+        </form>
+
+      <% if signed_in? %>
+        <li class="nav-item dropdown mr-2">
+          <a class="nav-item nav-link dropdown-toggle mr-md-2 avatar" href="#" id="bd-versions" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="<%= Gravatar.new("#{current_user.email}").image_url %>" class="rounded-circle" />
+            <span class="caret"></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+            <%= link_to 'Log Out', destroy_user_session_path, method: :delete, class:"dropdown-item" %>
+          </div>
+        </li>
+        <li class="nav-item mr-2 my-auto"><%= link_to "<span class='fas fa-plus-circle'></span>".html_safe, new_question_path %></li>
+
+      <% else %>
+        <li class="nav-item"><%= link_to "Sign Up", new_user_registration_path, class: 'nav-link' %></li>
+        <li class="nav-item"><%= link_to "Log In", new_user_session_path, class: 'nav-link' %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

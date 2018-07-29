@@ -1,0 +1,81 @@
+<% provide(:page_title, @question.title) %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="question">
+        <h2><%= @question.title %></h2>
+        <small>Asked by <%= @question.user.email %>, <%= time_ago_in_words(@question.created_at) %> ago.</small>
+        <div class="signed_in">
+          <% if signed_in? && @question.user == current_user %>
+              
+            <%= link_to "<i class='fas fa-pen'></i>".html_safe, edit_question_path(@question) %>
+            <%= link_to "<i class='fas fa-trash'></i>".html_safe, @question, method: :delete, data: { confirm: "Are you sure?" } %>
+              
+          <% end %>
+        </div>
+        <p><%= markdown(@question.description) %></p>
+        <hr>
+        <div class="votes">
+          <% if @question.voted_by? current_user %>
+            Votes: <%= @question.votes.count %> |
+            <%= link_to 'Unvote Question',question_vote_path(@question), method: :delete %>
+          <% else %>
+            Votes: <%= @question.votes.count %> |
+            <%= link_to 'Upvote Question', question_vote_path(@question), method: :post %>
+          <% end %>
+        </div>
+
+        <hr>
+      </div>  
+
+    </div>
+  </div>
+
+  <div class="row">
+    <h4><strong>Comments</strong></h4>
+  </div>
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2">
+      <% @question.comments.each do |comment| %> 
+        <div class="card mb-4">
+          <div class="card-header">
+            <img style="width: 20px;" src="<%= Gravatar.new("#{comment.user.email}").image_url %>" class="rounded-circle" />
+            <small><%= comment.user.email %>, 
+              <strong><%= time_ago_in_words(comment.created_at) %> ago.</strong>
+            </small>
+          </div>
+          <div class="card-body"> <%= markdown(comment.body) %> </div>
+        </div>
+      <% end %>
+
+      <% if signed_in? %>
+        <%= form_for [@question, @question.comments.build] do |f| %>
+          <div class="form-group">
+            <%= f.text_area :body, class: "form-control", placeholder: "Add Comment"%>
+          </div>
+            <%= f.submit "Comment", class: "btn btn-primary float-right font-weight-bold" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <h4><strong>Answers</strong></h4>
+  </div>
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2">
+      <%= render 'answers/show' %>
+
+      <% if signed_in? %>
+        <%= render 'answers/form' %>
+      <% end %>
+    </div>
+  </div>
+
+  <hr>
+
+</div>
